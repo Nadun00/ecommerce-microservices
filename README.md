@@ -346,29 +346,3 @@ show dbs
 
 ---
 
-## 👥 Member Contributions
-
-| Member   | Microservice     | Responsibilities                                              |
-|---------|-----------------|---------------------------------------------------------------|
-| Member 1 | Product Service  | Product model, CRUD endpoints, Swagger docs, port 3001        |
-| Member 2 | User Service     | User model, CRUD endpoints, Swagger docs, port 3002           |
-| Member 3 | Cart Service     | Cart model, add/remove/clear logic, Swagger docs, port 3003   |
-| Member 4 | Order Service    | Order model, order placement, status updates, port 3004       |
-| Member 5 | Payment Service  | Payment model, simulated processing, status updates, port 3005|
-
-**Shared (all members):** API Gateway integration, React frontend, MongoDB setup, testing
-
----
-
-## 📸 Screenshots to Take for Presentation
-
-1. React frontend — Product listing page with product cards
-2. React frontend — Cart page with items and total
-3. React frontend — Payment page with method selection
-4. React frontend — Orders page with status badges
-5. Swagger UI — Product Service at http://localhost:5000/product-docs
-6. Swagger UI — Execute a POST /products request and show 201 response
-7. Terminal windows — All 6 services running simultaneously
-8. Browser — http://localhost:5000 showing gateway info JSON
-9. MongoDB shell — `show dbs` showing all 5 separate databases
-10. Browser — Same endpoint accessed directly (port 3001) vs via gateway (port 5000)
