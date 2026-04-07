@@ -340,22 +340,6 @@ show dbs
 
 ---
 
-## 🎤 Viva Explanation Notes
-
-### What are microservices?
-> "Microservices is an architectural style where an application is broken into small, independent services that each handle one specific business function. Each service runs in its own process, has its own database, and communicates over HTTP APIs."
-
-### Why did we use microservices?
-> "We chose microservices because it mirrors real-world systems like Amazon and Netflix. Each team member could work on one service independently without blocking others. Each service can be scaled, deployed, and updated without affecting the rest of the system."
-
-### What does the API Gateway do?
-> "The API Gateway is a single entry point that sits in front of all our microservices. Instead of the frontend knowing about 5 different ports, it only talks to one URL — port 5000. The gateway routes requests internally to the right service."
-
-### Why MongoDB?
-> "MongoDB is a NoSQL document database that stores data as flexible JSON-like documents. It's perfect for microservices because each service can have its own schema without rigid table joins. It's also easy to set up and works naturally with JavaScript/Node.js."
-
-### How does the frontend only use one port?
-> "The React frontend only knows about http://localhost:5000. All API calls go through the gateway. The gateway then proxies requests to the correct microservice internally. This means the frontend is completely decoupled from the backend architecture."
 
 ### System flow:
 > "User visits frontend → clicks Add to Cart → React calls gateway at port 5000 → gateway forwards to Cart Service at port 3003 → Cart Service saves to MongoDB → response comes back up to the user."
