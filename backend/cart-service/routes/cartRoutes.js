@@ -11,7 +11,7 @@ const ctrl = require('../controllers/cartController');
 
 /**
  * @swagger
- * /cart:
+ * /api/cart:
  *   get:
  *     summary: Get cart for a user
  *     tags: [Cart]
@@ -30,7 +30,7 @@ router.get('/', ctrl.getCart);
 
 /**
  * @swagger
- * /cart/add:
+ * /api/cart/add:
  *   post:
  *     summary: Add item to cart
  *     tags: [Cart]
@@ -64,7 +64,7 @@ router.post('/add', ctrl.addToCart);
 
 /**
  * @swagger
- * /cart/remove/{productId}:
+ * /api/cart/remove/{productId}:
  *   delete:
  *     summary: Remove item from cart
  *     tags: [Cart]
@@ -87,7 +87,7 @@ router.delete('/remove/:productId', ctrl.removeFromCart);
 
 /**
  * @swagger
- * /cart/clear:
+ * /api/cart/clear:
  *   delete:
  *     summary: Clear entire cart
  *     tags: [Cart]

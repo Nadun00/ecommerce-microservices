@@ -11,7 +11,7 @@ const ctrl = require('../controllers/paymentController');
 
 /**
  * @swagger
- * /payments:
+ * /api/payments:
  *   get:
  *     summary: Get all payments
  *     tags: [Payments]
@@ -23,7 +23,7 @@ router.get('/', ctrl.getAllPayments);
 
 /**
  * @swagger
- * /payments/{id}:
+ * /api/payments/{id}:
  *   get:
  *     summary: Get payment by ID
  *     tags: [Payments]
@@ -43,7 +43,7 @@ router.get('/:id', ctrl.getPaymentById);
 
 /**
  * @swagger
- * /payments:
+ * /api/payments:
  *   post:
  *     summary: Process a new payment
  *     tags: [Payments]
@@ -76,7 +76,7 @@ router.post('/', ctrl.createPayment);
 
 /**
  * @swagger
- * /payments/{id}/status:
+ * /api/payments/{id}/status:
  *   put:
  *     summary: Update payment status
  *     tags: [Payments]

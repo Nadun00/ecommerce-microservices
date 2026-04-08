@@ -11,7 +11,7 @@ const ctrl = require('../controllers/userController');
 
 /**
  * @swagger
- * /users:
+ * /api/users:
  *   get:
  *     summary: Get all users
  *     tags: [Users]
@@ -23,7 +23,7 @@ router.get('/', ctrl.getAllUsers);
 
 /**
  * @swagger
- * /users/{id}:
+ * /api/users/{id}:
  *   get:
  *     summary: Get a user by ID
  *     tags: [Users]
@@ -43,7 +43,7 @@ router.get('/:id', ctrl.getUserById);
 
 /**
  * @swagger
- * /users:
+ * /api/users:
  *   post:
  *     summary: Create a new user
  *     tags: [Users]
@@ -74,7 +74,7 @@ router.post('/', ctrl.createUser);
 
 /**
  * @swagger
- * /users/{id}:
+ * /api/users/{id}:
  *   put:
  *     summary: Update a user
  *     tags: [Users]
@@ -97,7 +97,7 @@ router.put('/:id', ctrl.updateUser);
 
 /**
  * @swagger
- * /users/{id}:
+ * /api/users/{id}:
  *   delete:
  *     summary: Delete a user
  *     tags: [Users]

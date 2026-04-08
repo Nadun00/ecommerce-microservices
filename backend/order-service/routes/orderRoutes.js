@@ -11,7 +11,7 @@ const ctrl = require('../controllers/orderController');
 
 /**
  * @swagger
- * /orders:
+ * /api/orders:
  *   get:
  *     summary: Get all orders (optionally filter by userId)
  *     tags: [Orders]
@@ -29,7 +29,7 @@ router.get('/', ctrl.getAllOrders);
 
 /**
  * @swagger
- * /orders/{id}:
+ * /api/orders/{id}:
  *   get:
  *     summary: Get order by ID
  *     tags: [Orders]
@@ -49,7 +49,7 @@ router.get('/:id', ctrl.getOrderById);
 
 /**
  * @swagger
- * /orders:
+ * /api/orders:
  *   post:
  *     summary: Create a new order
  *     tags: [Orders]
@@ -87,7 +87,7 @@ router.post('/', ctrl.createOrder);
 
 /**
  * @swagger
- * /orders/{id}/status:
+ * /api/orders/{id}/status:
  *   put:
  *     summary: Update order status
  *     tags: [Orders]

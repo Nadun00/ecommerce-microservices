@@ -11,7 +11,7 @@ const ctrl = require('../controllers/productController');
 
 /**
  * @swagger
- * /products:
+ * /api/products:
  *   get:
  *     summary: Get all products
  *     tags: [Products]
@@ -23,7 +23,7 @@ router.get('/', ctrl.getAllProducts);
 
 /**
  * @swagger
- * /products/{id}:
+ * /api/products/{id}:
  *   get:
  *     summary: Get a product by ID
  *     tags: [Products]
@@ -43,7 +43,7 @@ router.get('/:id', ctrl.getProductById);
 
 /**
  * @swagger
- * /products:
+ * /api/products:
  *   post:
  *     summary: Create a new product
  *     tags: [Products]
@@ -80,7 +80,7 @@ router.post('/', ctrl.createProduct);
 
 /**
  * @swagger
- * /products/{id}:
+ * /api/products/{id}:
  *   put:
  *     summary: Update a product
  *     tags: [Products]
@@ -103,7 +103,7 @@ router.put('/:id', ctrl.updateProduct);
 
 /**
  * @swagger
- * /products/{id}:
+ * /api/products/{id}:
  *   delete:
  *     summary: Delete a product
  *     tags: [Products]
