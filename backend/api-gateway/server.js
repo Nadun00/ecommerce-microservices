@@ -100,7 +100,9 @@ app.use('/api/products', createProxyMiddleware({
 app.use('/api/users', createProxyMiddleware({
   target: SERVICES.user,
   changeOrigin: true,
-  pathRewrite: { '^/api/users': '/users' },
+  pathRewrite: (path, req) => {
+    return `/users${path === '/' ? '' : path}`;
+  },
   on: {
     error: (err, req, res) => {
       res.status(503).json({ error: 'User Service unavailable', details: err.message });
@@ -184,44 +186,44 @@ app.use('/payment-docs', createProxyMiddleware({
   pathRewrite: { '^/payment-docs': '/api-docs' },
 })); */
 
-app.use('/product-docs', createProxyMiddleware({
+app.use('/product-api-docs', createProxyMiddleware({
   target: SERVICES.product,
   changeOrigin: true,
   pathRewrite: (path, req) => {
     return `/api-docs${path === '/' ? '' : path}`;
-  },
+  }
 }));
 
-app.use('/user-docs', createProxyMiddleware({
+app.use('/user-api-docs', createProxyMiddleware({
   target: SERVICES.user,
   changeOrigin: true,
   pathRewrite: (path, req) => {
     return `/api-docs${path === '/' ? '' : path}`;
-  },
+  }
 }));
 
-app.use('/cart-docs', createProxyMiddleware({
+app.use('/cart-api-docs', createProxyMiddleware({
   target: SERVICES.cart,
   changeOrigin: true,
   pathRewrite: (path, req) => {
     return `/api-docs${path === '/' ? '' : path}`;
-  },
+  }
 }));
 
-app.use('/order-docs', createProxyMiddleware({
+app.use('/order-api-docs', createProxyMiddleware({
   target: SERVICES.order,
   changeOrigin: true,
   pathRewrite: (path, req) => {
     return `/api-docs${path === '/' ? '' : path}`;
-  },
+  }
 }));
 
-app.use('/payment-docs', createProxyMiddleware({
+app.use('/payment-api-docs', createProxyMiddleware({
   target: SERVICES.payment,
   changeOrigin: true,
   pathRewrite: (path, req) => {
     return `/api-docs${path === '/' ? '' : path}`;
-  },
+  }
 }));
 
 // ============================================================
@@ -242,12 +244,12 @@ app.get('/', (req, res) => {
       payments:  `http://localhost:${PORT}/api/payments`,
     },
     swaggerDocs: {
-      products: `http://localhost:${PORT}/product-docs`,
-      users:    `http://localhost:${PORT}/user-docs`,
-      cart:     `http://localhost:${PORT}/cart-docs`,
-      orders:   `http://localhost:${PORT}/order-docs`,
-      payments: `http://localhost:${PORT}/payment-docs`,
-    }
+      products: `http://localhost:${PORT}/product-api-docs`,
+      users:    `http://localhost:${PORT}/user-api-docs`,
+      cart:     `http://localhost:${PORT}/cart-api-docs`,
+      orders:   `http://localhost:${PORT}/order-api-docs`,
+      payments: `http://localhost:${PORT}/payment-api-docs`,
+}
   });
 });
 
@@ -273,10 +275,10 @@ app.listen(PORT, () => {
   console.log(`  → Orders:    http://localhost:${PORT}/api/orders`);
   console.log(`  → Payments:  http://localhost:${PORT}/api/payments`);
   console.log(`\n  Swagger Docs:`);
-  console.log(`  → Products:  http://localhost:${PORT}/product-docs`);
-  console.log(`  → Users:     http://localhost:${PORT}/user-docs`);
-  console.log(`  → Cart:      http://localhost:${PORT}/cart-docs`);
-  console.log(`  → Orders:    http://localhost:${PORT}/order-docs`);
-  console.log(`  → Payments:  http://localhost:${PORT}/payment-docs`);
+  console.log(`  → Products:  http://localhost:${PORT}/product-api-docs`);
+console.log(`  → Users:     http://localhost:${PORT}/user-api-docs`);
+console.log(`  → Cart:      http://localhost:${PORT}/cart-api-docs`);
+console.log(`  → Orders:    http://localhost:${PORT}/order-api-docs`);
+console.log(`  → Payments:  http://localhost:${PORT}/payment-api-docs`);
   console.log(`========================================\n`);
 });
