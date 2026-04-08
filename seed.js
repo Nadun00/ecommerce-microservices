@@ -80,7 +80,7 @@ async function seed() {
   let success = 0;
   for (const product of sampleProducts) {
     try {
-      const res = await axios.post(`${GATEWAY}/api/products`, product);
+      const res = await axios.post(`${GATEWAY}/gateway/products`, product);
       console.log(`✓ Created: ${res.data.name}`);
       success++;
     } catch (err) {

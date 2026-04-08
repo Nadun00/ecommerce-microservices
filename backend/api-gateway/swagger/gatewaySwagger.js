@@ -3,6 +3,7 @@ const userSwaggerSpec = require('../../user-service/swagger/swaggerConfig');
 const cartSwaggerSpec = require('../../cart-service/swagger/swaggerConfig');
 const orderSwaggerSpec = require('../../order-service/swagger/swaggerConfig');
 const paymentSwaggerSpec = require('../../payment-service/swagger/swaggerConfig');
+const { buildGatewayServiceSpec } = require('./buildGatewaySpec');
 
 const serviceSpecs = [
   productSwaggerSpec,
@@ -11,6 +12,7 @@ const serviceSpecs = [
   orderSwaggerSpec,
   paymentSwaggerSpec
 ];
+const gatewayServiceSpecs = serviceSpecs.map(buildGatewayServiceSpec);
 
 function mergeUniqueTags(specs) {
   const map = new Map();
@@ -51,7 +53,7 @@ module.exports = {
   servers: [
     { url: 'http://localhost:5000', description: 'API Gateway' }
   ],
-  tags: mergeUniqueTags(serviceSpecs),
+  tags: mergeUniqueTags(gatewayServiceSpecs),
   paths: {
     '/': {
       get: {
@@ -77,7 +79,7 @@ module.exports = {
         }
       }
     },
-    ...mergePaths(serviceSpecs)
+    ...mergePaths(gatewayServiceSpecs)
   },
-  components: mergeComponents(serviceSpecs)
+  components: mergeComponents(gatewayServiceSpecs)
 };

@@ -11,6 +11,7 @@ const cartSwaggerSpec = require('../cart-service/swagger/swaggerConfig');
 const orderSwaggerSpec = require('../order-service/swagger/swaggerConfig');
 const paymentSwaggerSpec = require('../payment-service/swagger/swaggerConfig');
 const gatewaySwaggerSpec = require('./swagger/gatewaySwagger');
+const { buildGatewayServiceSpec } = require('./swagger/buildGatewaySpec');
 const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
 
@@ -27,11 +28,11 @@ const SERVICES = {
 };
 
 const docsRegistry = [
-  { key: 'products', mountPath: '/product-docs', serviceUrl: SERVICES.product, spec: productSwaggerSpec },
-  { key: 'users', mountPath: '/user-docs', serviceUrl: SERVICES.user, spec: userSwaggerSpec },
-  { key: 'cart', mountPath: '/cart-docs', serviceUrl: SERVICES.cart, spec: cartSwaggerSpec },
-  { key: 'orders', mountPath: '/order-docs', serviceUrl: SERVICES.order, spec: orderSwaggerSpec },
-  { key: 'payments', mountPath: '/payment-docs', serviceUrl: SERVICES.payment, spec: paymentSwaggerSpec }
+  { key: 'products', mountPath: '/product-docs', serviceUrl: SERVICES.product, spec: buildGatewayServiceSpec(productSwaggerSpec) },
+  { key: 'users', mountPath: '/user-docs', serviceUrl: SERVICES.user, spec: buildGatewayServiceSpec(userSwaggerSpec) },
+  { key: 'cart', mountPath: '/cart-docs', serviceUrl: SERVICES.cart, spec: buildGatewayServiceSpec(cartSwaggerSpec) },
+  { key: 'orders', mountPath: '/order-docs', serviceUrl: SERVICES.order, spec: buildGatewayServiceSpec(orderSwaggerSpec) },
+  { key: 'payments', mountPath: '/payment-docs', serviceUrl: SERVICES.payment, spec: buildGatewayServiceSpec(paymentSwaggerSpec) }
 ];
 
 app.disable('x-powered-by');
@@ -48,12 +49,12 @@ app.use((req, res, next) => {
 // API ROUTES — Forward to microservices
 // ============================================================
 
-// /api/products/* → Product Service (removes /api prefix)
-app.use('/api/products', createProxyMiddleware({
+// /gateway/products/* → Product Service
+app.use('/gateway/products', createProxyMiddleware({
   target: SERVICES.product,
   changeOrigin: true,
   pathRewrite: (path, req) => {
-    return `/products${path === '/' ? '' : path}`;
+    return `/api/products${path === '/' ? '' : path}`;
   },
   on: {
     error: (err, req, res) => {
@@ -62,11 +63,13 @@ app.use('/api/products', createProxyMiddleware({
   }
 }));
 
-// /api/users/* → User Service
-app.use('/api/users', createProxyMiddleware({
+// /gateway/users/* → User Service
+app.use('/gateway/users', createProxyMiddleware({
   target: SERVICES.user,
   changeOrigin: true,
-  pathRewrite: { '^/api/users': '/users' },
+  pathRewrite: (path, req) => {
+    return `/api/users${path === '/' ? '' : path}`;
+  },
   on: {
     error: (err, req, res) => {
       res.status(503).json({ error: 'User Service unavailable', details: err.message });
@@ -74,12 +77,12 @@ app.use('/api/users', createProxyMiddleware({
   }
 }));
 
-// /api/cart/* → Cart Service
-app.use('/api/cart', createProxyMiddleware({
+// /gateway/cart/* → Cart Service
+app.use('/gateway/cart', createProxyMiddleware({
   target: SERVICES.cart,
   changeOrigin: true,
   pathRewrite: (path, req) => {
-    return `/cart${path === '/' ? '' : path}`;
+    return `/api/cart${path === '/' ? '' : path}`;
   },
   on: {
     error: (err, req, res) => {
@@ -88,12 +91,12 @@ app.use('/api/cart', createProxyMiddleware({
   }
 }));
 
-// /api/orders/* → Order Service
-app.use('/api/orders', createProxyMiddleware({
+// /gateway/orders/* → Order Service
+app.use('/gateway/orders', createProxyMiddleware({
   target: SERVICES.order,
   changeOrigin: true,
   pathRewrite: (path, req) => {
-    return `/orders${path === '/' ? '' : path}`;
+    return `/api/orders${path === '/' ? '' : path}`;
   },
   on: {
     error: (err, req, res) => {
@@ -102,12 +105,12 @@ app.use('/api/orders', createProxyMiddleware({
   }
 }));
 
-// /api/payments/* → Payment Service
-app.use('/api/payments', createProxyMiddleware({
+// /gateway/payments/* → Payment Service
+app.use('/gateway/payments', createProxyMiddleware({
   target: SERVICES.payment,
   changeOrigin: true,
   pathRewrite: (path, req) => {
-    return `/payments${path === '/' ? '' : path}`;
+    return `/api/payments${path === '/' ? '' : path}`;
   },
   on: {
     error: (err, req, res) => {
@@ -200,11 +203,11 @@ app.get('/', (req, res) => {
     service: 'api-gateway',
     port: PORT,
     routes: {
-      products: `${gatewayBaseUrl}/api/products`,
-      users: `${gatewayBaseUrl}/api/users`,
-      cart: `${gatewayBaseUrl}/api/cart`,
-      orders: `${gatewayBaseUrl}/api/orders`,
-      payments: `${gatewayBaseUrl}/api/payments`
+      products: `${gatewayBaseUrl}/gateway/products`,
+      users: `${gatewayBaseUrl}/gateway/users`,
+      cart: `${gatewayBaseUrl}/gateway/cart`,
+      orders: `${gatewayBaseUrl}/gateway/orders`,
+      payments: `${gatewayBaseUrl}/gateway/payments`
     },
     swaggerDocs: {
       products: `http://localhost:${PORT}/product-docs`,
@@ -231,12 +234,6 @@ app.get('/api-docs.json', (req, res) => {
 app.get('/openapi.json', (req, res) => {
   res.json(gatewaySwaggerSpec);
 });
-
-createServiceProxy('/api/products', SERVICES.product, 'Product Service');
-createServiceProxy('/api/users', SERVICES.user, 'User Service');
-createServiceProxy('/api/cart', SERVICES.cart, 'Cart Service');
-createServiceProxy('/api/orders', SERVICES.order, 'Order Service');
-createServiceProxy('/api/payments', SERVICES.payment, 'Payment Service');
 
 docsRegistry.forEach(({ mountPath, serviceUrl, spec }) => {
   app.get(`${mountPath}.json`, (req, res) => {
@@ -280,12 +277,12 @@ app.listen(PORT, () => {
   console.log(`  API Gateway running on port ${PORT}`);
   console.log(`========================================`);
   console.log(`  Gateway URL:  http://localhost:${PORT}`);
-  console.log(`\n  API Routes:`);
-  console.log(`  → Products:  http://localhost:${PORT}/api/products`);
-  console.log(`  → Users:     http://localhost:${PORT}/api/users`);
-  console.log(`  → Cart:      http://localhost:${PORT}/api/cart`);
-  console.log(`  → Orders:    http://localhost:${PORT}/api/orders`);
-  console.log(`  → Payments:  http://localhost:${PORT}/api/payments`);
+  console.log(`\n  Gateway Routes:`);
+  console.log(`  → Products:  http://localhost:${PORT}/gateway/products`);
+  console.log(`  → Users:     http://localhost:${PORT}/gateway/users`);
+  console.log(`  → Cart:      http://localhost:${PORT}/gateway/cart`);
+  console.log(`  → Orders:    http://localhost:${PORT}/gateway/orders`);
+  console.log(`  → Payments:  http://localhost:${PORT}/gateway/payments`);
   console.log(`\n  Swagger Docs:`);
   console.log(`  → Products:  http://localhost:${PORT}/product-docs`);
   console.log(`  → Users:     http://localhost:${PORT}/user-docs`);
