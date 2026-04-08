@@ -154,7 +154,7 @@ app.use('/api/payments', createProxyMiddleware({
 // SWAGGER DOCS PROXY — Access all service docs via gateway
 // ============================================================
 
-app.use('/product-docs', createProxyMiddleware({
+/*app.use('/product-docs', createProxyMiddleware({
   target: SERVICES.product,
   changeOrigin: true,
   pathRewrite: { '^/product-docs': '/api-docs' },
@@ -182,6 +182,46 @@ app.use('/payment-docs', createProxyMiddleware({
   target: SERVICES.payment,
   changeOrigin: true,
   pathRewrite: { '^/payment-docs': '/api-docs' },
+})); */
+
+app.use('/product-docs', createProxyMiddleware({
+  target: SERVICES.product,
+  changeOrigin: true,
+  pathRewrite: (path, req) => {
+    return `/api-docs${path === '/' ? '' : path}`;
+  },
+}));
+
+app.use('/user-docs', createProxyMiddleware({
+  target: SERVICES.user,
+  changeOrigin: true,
+  pathRewrite: (path, req) => {
+    return `/api-docs${path === '/' ? '' : path}`;
+  },
+}));
+
+app.use('/cart-docs', createProxyMiddleware({
+  target: SERVICES.cart,
+  changeOrigin: true,
+  pathRewrite: (path, req) => {
+    return `/api-docs${path === '/' ? '' : path}`;
+  },
+}));
+
+app.use('/order-docs', createProxyMiddleware({
+  target: SERVICES.order,
+  changeOrigin: true,
+  pathRewrite: (path, req) => {
+    return `/api-docs${path === '/' ? '' : path}`;
+  },
+}));
+
+app.use('/payment-docs', createProxyMiddleware({
+  target: SERVICES.payment,
+  changeOrigin: true,
+  pathRewrite: (path, req) => {
+    return `/api-docs${path === '/' ? '' : path}`;
+  },
 }));
 
 // ============================================================
