@@ -154,11 +154,11 @@ Frontend only knows ONE URL:
   http://localhost:5000
 
 Gateway routes internally:
-  /api/products  → :3001
-  /api/users     → :3002
-  /api/cart      → :3003
-  /api/orders    → :3004
-  /api/payments  → :3005
+  /gateway/products  → :3001
+  /gateway/users     → :3002
+  /gateway/cart      → :3003
+  /gateway/orders    → :3004
+  /gateway/payments  → :3005
 ```
 
 **Benefits:**
@@ -200,12 +200,12 @@ This ensures services are truly independent — no shared database coupling.
 **Flow:**
 ```
 1. User opens http://localhost:3000 (React app)
-2. React fetches products → GET http://localhost:5000/api/products
+2. React fetches products → GET http://localhost:5000/gateway/products
 3. Gateway forwards → Product Service at :3001
 4. MongoDB returns data → back to frontend
-5. User clicks "Add to Cart" → POST /api/cart/add → Gateway → Cart Service
-6. User clicks "Place Order" → POST /api/orders → Gateway → Order Service
-7. User submits payment → POST /api/payments → Gateway → Payment Service
+5. User clicks "Add to Cart" → POST /gateway/cart/add → Gateway → Cart Service
+6. User clicks "Place Order" → POST /gateway/orders → Gateway → Order Service
+7. User submits payment → POST /gateway/payments → Gateway → Payment Service
 ```
 
 **Key Rule:** The React frontend NEVER calls service ports directly.
@@ -273,9 +273,9 @@ GET http://localhost:3001/products
 
 **Via API Gateway:**
 ```
-GET http://localhost:5000/api/products
+GET http://localhost:5000/gateway/products
 → Gateway receives request
-→ Internally forwards to http://localhost:3001/products
+→ Internally forwards to http://localhost:3001/api/products
 → Same result, but through gateway
 ```
 

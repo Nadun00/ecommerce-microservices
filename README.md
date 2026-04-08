@@ -258,16 +258,16 @@ PUT    http://localhost:3005/payments/:id/status
 ### Via API Gateway (port 5000 only):
 
 ```
-GET    http://localhost:5000/api/products
-POST   http://localhost:5000/api/products
-GET    http://localhost:5000/api/users
-POST   http://localhost:5000/api/users
-GET    http://localhost:5000/api/cart?userId=demo-user-001
-POST   http://localhost:5000/api/cart/add
-GET    http://localhost:5000/api/orders
-POST   http://localhost:5000/api/orders
-GET    http://localhost:5000/api/payments
-POST   http://localhost:5000/api/payments
+GET    http://localhost:5000/gateway/products
+POST   http://localhost:5000/gateway/products
+GET    http://localhost:5000/gateway/users
+POST   http://localhost:5000/gateway/users
+GET    http://localhost:5000/gateway/cart?userId=demo-user-001
+POST   http://localhost:5000/gateway/cart/add
+GET    http://localhost:5000/gateway/orders
+POST   http://localhost:5000/gateway/orders
+GET    http://localhost:5000/gateway/payments
+POST   http://localhost:5000/gateway/payments
 ```
 
 ---
@@ -277,7 +277,7 @@ POST   http://localhost:5000/api/payments
 ### Using Swagger UI (Recommended for Demo):
 
 1. Open http://localhost:5000/product-docs
-2. Click "POST /products" → "Try it out"
+2. Click "POST /gateway/products" → "Try it out"
 3. Paste this body:
 ```json
 {
@@ -295,25 +295,25 @@ POST   http://localhost:5000/api/payments
 
 ```bash
 # Create a product
-curl -X POST http://localhost:5000/api/products \
+curl -X POST http://localhost:5000/gateway/products \
   -H "Content-Type: application/json" \
   -d '{"name":"Laptop","price":999.99,"category":"Electronics","stock":5}'
 
 # Get all products
-curl http://localhost:5000/api/products
+curl http://localhost:5000/gateway/products
 
 # Add to cart
-curl -X POST http://localhost:5000/api/cart/add \
+curl -X POST http://localhost:5000/gateway/cart/add \
   -H "Content-Type: application/json" \
   -d '{"userId":"demo-user-001","productId":"<id>","name":"Laptop","price":999.99,"quantity":1}'
 
 # Place an order
-curl -X POST http://localhost:5000/api/orders \
+curl -X POST http://localhost:5000/gateway/orders \
   -H "Content-Type: application/json" \
   -d '{"userId":"demo-user-001","items":[{"productId":"<id>","name":"Laptop","price":999.99,"quantity":1}],"total":999.99}'
 
 # Process payment
-curl -X POST http://localhost:5000/api/payments \
+curl -X POST http://localhost:5000/gateway/payments \
   -H "Content-Type: application/json" \
   -d '{"orderId":"<orderId>","amount":999.99,"paymentMethod":"credit_card"}'
 ```
